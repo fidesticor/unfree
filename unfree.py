@@ -6,6 +6,20 @@ from tkinter import *
 from PIL import *
 from PIL import Image, ImageTk
 
+def randomExcept(a,b,exception):
+    list=[]
+    i=a
+    while i<=b:
+        j=0
+        while j<len(exception):
+            if i==exception[j]:
+                break
+            j+=1
+        if j==len(exception):
+            list.append(i)
+        i+=1
+    r=random.choice(list)
+    return r
 class BlockType:
     def __init__(self,pilimage,pilimagetkphotoimage,typename):
         self.i=pilimage
@@ -16,11 +30,9 @@ class Womap:
     def __init__(self,blocktypelist,numberofrows,numberofcolumns,mapstring=""):
         if mapstring=="":
             mapstring=blocktypelist[0].n*numberofrows*numberofcolumns
-            r1=random.randint(0,numberofrows*numberofcolumns-1)
+            r1=randomExcept(0,numberofrows*numberofcolumns-1,[])
             mapstring=mapstring[:r1]+blocktypelist[1].n+mapstring[r1+1:]
-            r2=random.randint(0,numberofrows*numberofcolumns-1)
-            while r2==r1:
-                r2=random.randint(0,numberofrows*numberofcolumns-1)
+            r2=randomExcept(0,numberofrows*numberofcolumns-1,[r1])
             mapstring=mapstring[:r2]+blocktypelist[2].n+mapstring[r2+1:]
             self.s=mapstring
         else:
@@ -104,9 +116,7 @@ class Field:
     def makeStep(self,srcid,dstid):
         self.b[srcid].setBlockType(blts[0])
         if self.b[dstid].b.n==blts[2].n:
-            r=random.randint(0,self.m.m*self.m.n-1)
-            while r==dstid:
-                r=random.randint(0,self.m.m*self.m.n-1)
+            r=randomExcept(0,self.m.m*self.m.n-1,[dstid])
             self.b[r].setBlockType(blts[2])
         self.b[dstid].setBlockType(blts[1])
 #
